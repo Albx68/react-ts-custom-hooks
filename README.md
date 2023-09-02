@@ -10,6 +10,20 @@ Hooks:
 
 
  
-   ```const {height,width} = useWindowDimensions()```
+   ```
+   function Example() {
+  
+     const { width, height } = useWindowDimensions();
 
+        return (
+          <div>
+            <p>Width: {width}px</p>
+            <p>Height: {height}px</p>
+            { width > 720? <p>big screen</p> : <p>small screen</p> }
+          </div>
+        );
+      }
+
+   export default Example;
+```
    use cases : One particular use case can be rendering content conditionally based on screen size
