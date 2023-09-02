@@ -5,7 +5,6 @@ How to:
 
    
 Hooks:
-
 <br>
    + The useWindowDimensions hook provides the current width and height of the browser window, allowing you to create responsive and adaptable user interfaces.
 
