@@ -107,4 +107,39 @@ It's also useful for saving and restoring parts of your app's state. This provid
 In summary, the `useLocalStorage` hook simplifies working with browser storage and proves invaluable for persisting data across page refreshes or user sessions. It's a powerful tool for enhancing the user experience in your web applications.
 <br>
 
+
+# useMousePointer
+
+A React custom hook to track the mouse pointer's current coordinates on the screen.
+
+## Example
+
+```jsx
+import React from 'react';
+import useMousePointer from './useMousePointer';
+
+function MyComponent() {
+  const { x, y } = useMousePointer();
+
+  return (
+    <div>
+      <p>Mouse X: {x}</p>
+      <p>Mouse Y: {y}</p>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+# Common Use Cases for `useMousePointer`
+
+The `useMousePointer` hook is versatile and can be useful in various scenarios, including:
+
+1. **Tracking Mouse Cursor Positions:** You can use this hook to keep track of the current coordinates of the mouse cursor on the screen. This information is valuable for creating interactive components that respond to mouse movements.
+
+2. **Implementing Mouse-Dependent Features:** When you need to implement features that depend on mouse interactions, such as tooltips or pop-up menus triggered by hovering over elements, the `useMousePointer` hook can provide the mouse's position to facilitate these interactions.
+
+3. **Creating Visual Effects:** If you want to add visual effects or animations that follow the mouse pointer, this hook is an excellent choice. You can use the mouse coordinates to update the position of elements, creating dynamic and engaging user experiences.
+
+<br>
 more coming soon...
