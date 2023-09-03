@@ -16,7 +16,7 @@ function App() {
 export default App
 
 function Example() {
-  const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle(["option 1", "option 2", "option 3"])
+  const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle(["🎃", "👾", "🐸"])
   const [storedValue, setStoredValue] = useLocalStorage('myKey', 'default-value');
   const { x, y } = useMousePointer()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
