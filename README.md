@@ -144,4 +144,53 @@ The `useMousePointer` hook is versatile and can be useful in various scenarios, 
 3. **Creating Visual Effects:** If you want to add visual effects or animations that follow the mouse pointer, this hook is an excellent choice. You can use the mouse coordinates to update the position of elements, creating dynamic and engaging user experiences.
 
 <br>
+
+# `useCycle` Custom React Hook
+
+The `useCycle` hook is a custom React hook that allows you to cycle through an array of values in a circular manner. It provides functions to move to the previous and next values in the array.
+
+## Example
+
+```jsx
+import React from 'react';
+import useCycle from './useCycle'; // Import your custom hook
+
+function Example() {
+  const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle([
+    'Value 1',
+    'Value 2',
+    'Value 3',
+  ]);
+
+  return (
+    <div>
+      <p>Current Value: {currentValue}</p>
+      <button onClick={cycleToPrevValue}>Cycle to Previous Value</button>
+      <button onClick={cycleToNextValue}>Cycle to Next Value</button>
+    </div>
+  );
+}
+```
+# Common Use Cases
+
+The `useCycle` hook can be useful in various scenarios:
+
+1. **Navigation Menus**: Create a carousel-like navigation menu where users can cycle through options.
+
+2. **Sliders and Carousels**: Implement image sliders or carousels where users can move forward and backward through images.
+
+3. **Tabbed Interfaces**: Build tabbed user interfaces where users can switch between tabs in a circular manner.
+
+4. **Game Development**: Create games with rotating options, such as quiz games or interactive puzzles.
+
+5. **UI Components**: Enhance user interface components like dropdown menus or date pickers with circular navigation.
+
+6. **Rotating Banners**: Implement rotating banners or advertisements on websites.
+
+7. **Product Selection**: Allow users to cycle through product options or variants.
+
+The `useCycle` hook simplifies the logic required to create circular navigation and makes it easy to add this functionality to various parts of your React applications.
+export default Example;
+
+<br>
 more coming soon...
