@@ -1,20 +1,17 @@
 
 import './App.css'
-import useLocalStorage from './utils/customHooks/useLocalStorage'
+import useLocalStorage from './utils/customHooks/useLocalStorage';
 
 function App() {
   const [val, setVal] = useLocalStorage('test', 'hello')
+
   const handleToggle = () => {
-    if (val === "hello") {
-      setVal("hi")
-    }
-    else {
-      setVal("hello")
-    }
-  }
+    setVal(val === 'hello' ? 'hi' : 'hello');
+  };
+
   return (
     <>
-      <p>testing use Local storage</p>
+      <p>testing useLocalStorage</p>
       <p>Val: {val}</p>
       <button onClick={handleToggle}>toggle val</button>
     </>
