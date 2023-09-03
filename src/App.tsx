@@ -1,5 +1,6 @@
 
 import './App.css'
+import useCycle from './utils/customHooks/useCycle';
 import useLocalStorage from './utils/customHooks/useLocalStorage';
 import useMousePointer from './utils/customHooks/useMousePointer';
 
@@ -15,7 +16,7 @@ function App() {
 export default App
 
 function Example() {
-  // Usage of useLocalStorage to store and retrieve data
+  const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle(["option 1", "option 2", "option 3"])
   const [storedValue, setStoredValue] = useLocalStorage('myKey', 'default-value');
   const { x, y } = useMousePointer()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +33,9 @@ function Example() {
         placeholder="Type something..."
       />
       <p>Stored Value: {storedValue}</p>
+      <div>{currentValue}</div>
+      <button onClick={cycleToPrevValue}>Prev</button>
+      <button onClick={cycleToNextValue}>Next</button>
     </div>
   );
 }
