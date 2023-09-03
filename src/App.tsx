@@ -3,19 +3,34 @@ import './App.css'
 import useLocalStorage from './utils/customHooks/useLocalStorage';
 
 function App() {
-  const [val, setVal] = useLocalStorage('test', 'hello')
-
-  const handleToggle = () => {
-    setVal(val === 'hello' ? 'hi' : 'hello');
-  };
 
   return (
     <>
-      <p>testing useLocalStorage</p>
-      <p>Val: {val}</p>
-      <button onClick={handleToggle}>toggle val</button>
+      <Example />
     </>
   )
 }
 
 export default App
+
+function Example() {
+  // Usage of useLocalStorage to store and retrieve data
+  const [storedValue, setStoredValue] = useLocalStorage('myKey', 'default-value');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStoredValue(e.target.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={storedValue}
+        onChange={handleChange}
+        placeholder="Type something..."
+      />
+      <p>Stored Value: {storedValue}</p>
+    </div>
+  );
+}
+
