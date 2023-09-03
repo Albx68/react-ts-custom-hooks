@@ -9,6 +9,8 @@ To access these custom hooks, navigate to `src/utils/customHooks` and copy paste
 
 ## Hooks
 
+
+
 ### useWindowDimensions
 
 The `useWindowDimensions` hook provides the current width and height of the browser window, allowing you to create responsive and adaptable user interfaces.
@@ -29,7 +31,7 @@ function Example() {
 export default Example;
 ```
 
-# Using the useLocalStorage Hook
+###useLocalStorage
 
 The `useLocalStorage` hook is a handy tool that allows you to work with your browser's localStorage, making it easy to store and retrieve data. It's a versatile tool that can be useful in various scenarios.
 
@@ -108,7 +110,7 @@ In summary, the `useLocalStorage` hook simplifies working with browser storage a
 <br>
 
 
-# useMousePointer
+### useMousePointer
 
 A React custom hook to track the mouse pointer's current coordinates on the screen.
 
