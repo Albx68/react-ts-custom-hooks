@@ -31,7 +31,7 @@ function Example() {
 export default Example;
 ```
 
-###useLocalStorage
+### useLocalStorage
 
 The `useLocalStorage` hook is a handy tool that allows you to work with your browser's localStorage, making it easy to store and retrieve data. It's a versatile tool that can be useful in various scenarios.
 
