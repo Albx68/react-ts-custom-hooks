@@ -9,8 +9,6 @@ To access these custom hooks, navigate to `src/utils/customHooks` and copy paste
 
 ## Hooks
 
-
-
 ### useWindowDimensions
 
 The `useWindowDimensions` hook provides the current width and height of the browser window, allowing you to create responsive and adaptable user interfaces.
@@ -55,12 +53,15 @@ When you use the `useLocalStorage` hook, it follows these steps:
    - A function called `setStoredValue` that lets you change and save the data back to localStorage.
 
 ```jsx
-import React from 'react';
-import useLocalStorage from './utils/customHooks/useLocalStorage'; // Adjust the import path
+import React from "react";
+import useLocalStorage from "./utils/customHooks/useLocalStorage"; // Adjust the import path
 
 function Example() {
   // Usage of useLocalStorage to store and retrieve data
-  const [storedValue, setStoredValue] = useLocalStorage('myKey', 'default-value');
+  const [storedValue, setStoredValue] = useLocalStorage(
+    "myKey",
+    "default-value",
+  );
 
   const handleChange = (e) => {
     setStoredValue(e.target.value);
@@ -109,7 +110,6 @@ It's also useful for saving and restoring parts of your app's state. This provid
 In summary, the `useLocalStorage` hook simplifies working with browser storage and proves invaluable for persisting data across page refreshes or user sessions. It's a powerful tool for enhancing the user experience in your web applications.
 <br>
 
-
 ### useMousePointer
 
 A React custom hook to track the mouse pointer's current coordinates on the screen.
@@ -117,8 +117,8 @@ A React custom hook to track the mouse pointer's current coordinates on the scre
 ## Example
 
 ```jsx
-import React from 'react';
-import useMousePointer from './useMousePointer';
+import React from "react";
+import useMousePointer from "./useMousePointer";
 
 function MyComponent() {
   const { x, y } = useMousePointer();
@@ -133,6 +133,7 @@ function MyComponent() {
 
 export default MyComponent;
 ```
+
 # Common Use Cases for `useMousePointer`
 
 The `useMousePointer` hook is versatile and can be useful in various scenarios, including:
@@ -152,14 +153,14 @@ The `useCycle` hook is a custom React hook that allows you to cycle through an a
 ## Example
 
 ```jsx
-import React from 'react';
-import useCycle from './useCycle'; // Import your custom hook
+import React from "react";
+import useCycle from "./useCycle"; // Import your custom hook
 
 function Example() {
   const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle([
-    'Value 1',
-    'Value 2',
-    'Value 3',
+    "Value 1",
+    "Value 2",
+    "Value 3",
   ]);
 
   return (
@@ -171,6 +172,7 @@ function Example() {
   );
 }
 ```
+
 # Common Use Cases
 
 The `useCycle` hook can be useful in various scenarios:
@@ -211,14 +213,15 @@ The `useTimer` hook is a custom React hook for creating a timer that counts down
 ## Code Example
 
 ```jsx
-import React from 'react';
-import useTimer from './useTimer'; // Import the custom hook
+import React from "react";
+import useTimer from "./useTimer"; // Import the custom hook
 
 function TimerComponent() {
   // Initialize the timer with a duration of 10 seconds
-  const { timeRemaining, startTimer, stopTimer, resetTimer, timerInProgress } = useTimer(10000, () => {
-    console.log('Timer ended!'); // You can replace this with your desired action.
-  });
+  const { timeRemaining, startTimer, stopTimer, resetTimer, timerInProgress } =
+    useTimer(10000, () => {
+      console.log("Timer ended!"); // You can replace this with your desired action.
+    });
 
   return (
     <div>
