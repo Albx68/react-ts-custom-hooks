@@ -1,38 +1,46 @@
-
-import { useCallback } from 'react';
-import './App.css'
-import useCycle from './utils/customHooks/useCycle';
-import useLocalStorage from './utils/customHooks/useLocalStorage';
-import useMousePointer from './utils/customHooks/useMousePointer';
-import useTimer from './utils/customHooks/useTimer';
+import { useCallback } from "react";
+import "./App.css";
+import useCycle from "./utils/customHooks/useCycle";
+import useLocalStorage from "./utils/customHooks/useLocalStorage";
+import useMousePointer from "./utils/customHooks/useMousePointer";
+import useTimer from "./utils/customHooks/useTimer";
 
 function App() {
-
   return (
     <>
       <Example />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
 
-const timerDuration = 100000
+const timerDuration = 100000;
 function Example() {
-  const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle(["🎃", "👾", "🐸"])
+  const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle([
+    "🎃",
+    "👾",
+    "🐸",
+  ]);
   const timerCallback = useCallback(() => {
-    return alert(`Timer of ${timerDuration}s has ended`)
-  }, [])
-  const { timeRemaining, startTimer, stopTimer, resetTimer, timerInProgress } = useTimer(timerDuration, timerCallback)
-  const [storedValue, setStoredValue] = useLocalStorage('myKey', 'default-value');
-  const { x, y } = useMousePointer()
+    return alert(`Timer of ${timerDuration}s has ended`);
+  }, []);
+  const { timeRemaining, startTimer, stopTimer, resetTimer, timerInProgress } =
+    useTimer(timerDuration, timerCallback);
+  const [storedValue, setStoredValue] = useLocalStorage(
+    "myKey",
+    "default-value",
+  );
+  const { x, y } = useMousePointer();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStoredValue(e.target.value);
   };
 
   return (
     <div>
-      <p>Mouse X:{x} Y:{y}</p>
+      <p>
+        Mouse X:{x} Y:{y}
+      </p>
       <input
         type="text"
         value={storedValue}
@@ -44,13 +52,12 @@ function Example() {
       <button onClick={cycleToPrevValue}>Prev</button>
       <button onClick={cycleToNextValue}>Next</button>
 
-
       <div>
         <p>{timerInProgress && "waiting for OTP"}</p>
         <p>{timeRemaining}</p>
         <p>{millisecondsToMinutesAndSeconds(timeRemaining)}</p>
         <button onClick={stopTimer}>Stop Timer</button>
-        <button onClick={startTimer} >start timer</button>
+        <button onClick={startTimer}>start timer</button>
         <button onClick={resetTimer}>Reset timer</button>
       </div>
     </div>
@@ -68,5 +75,3 @@ function millisecondsToMinutesAndSeconds(milliseconds: number) {
   // Format the result as "Xm:Ys"
   return `${minutes}m:${seconds}s`;
 }
-
-

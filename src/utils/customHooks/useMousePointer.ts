@@ -1,32 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface MouseCoordinates {
-    x: number;
-    y: number;
+  x: number;
+  y: number;
 }
 
 const useMousePointer = (): MouseCoordinates => {
+  const [mousePosition, setMousePosition] = useState<MouseCoordinates>({
+    x: 0,
+    y: 0,
+  });
 
-    const [mousePosition, setMousePosition] = useState<MouseCoordinates>({
-        x: 0,
-        y: 0,
-    });
+  const updateMousePosition = (e: MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
 
-    const updateMousePosition = (e: MouseEvent) => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
+  useEffect(() => {
+    window.addEventListener("mousemove", updateMousePosition);
+
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
     };
+  }, []);
 
-    useEffect(() => {
-
-        window.addEventListener('mousemove', updateMousePosition);
-
-        return () => {
-            window.removeEventListener('mousemove', updateMousePosition);
-        };
-
-    }, []);
-
-    return mousePosition;
+  return mousePosition;
 };
 
 export default useMousePointer;
