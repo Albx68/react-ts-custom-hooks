@@ -1,9 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import "./App.css";
 import useCycle from "./utils/customHooks/useCycle";
 import useLocalStorage from "./utils/customHooks/useLocalStorage";
 import useMousePointer from "./utils/customHooks/useMousePointer";
 import useTimer from "./utils/customHooks/useTimer";
+import useInView from "./utils/customHooks/useInView";
 
 function App() {
   return (
@@ -17,6 +18,8 @@ export default App;
 
 const timerDuration = 100000;
 function Example() {
+  const inViewTestRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(inViewTestRef, {})
   const { currentValue, cycleToPrevValue, cycleToNextValue } = useCycle([
     "🎃",
     "👾",
@@ -60,6 +63,11 @@ function Example() {
         <button onClick={startTimer}>start timer</button>
         <button onClick={resetTimer}>Reset timer</button>
       </div>
+      <div style={{ position: "sticky", padding: "20px", color: isInView ? "#99ff99" : "#ff9999" }}>{isInView ? "Green Box In View" : "Green Box not in view, scroll"}</div>
+
+      <div style={{ height: "600px" }}></div>
+      <div style={{ height: "60px", width: "60px", borderRadius: "10px", backgroundColor: "#99ff99" }} ref={inViewTestRef}></div>
+
     </div>
   );
 }
