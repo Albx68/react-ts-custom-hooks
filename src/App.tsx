@@ -5,6 +5,7 @@ import useLocalStorage from "./utils/customHooks/useLocalStorage";
 import useMousePointer from "./utils/customHooks/useMousePointer";
 import useTimer from "./utils/customHooks/useTimer";
 import useInView from "./utils/customHooks/useInView";
+import KeyboardEvents from "./Examples/KeyboardEvents";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function Example() {
 
   return (
     <div>
+      <KeyboardEvents />
       <p>
         Mouse X:{x} Y:{y}
       </p>
