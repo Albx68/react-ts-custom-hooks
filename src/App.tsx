@@ -10,7 +10,7 @@ import KeyboardEvents from "./Examples/KeyboardEvents";
 function App() {
   return (
     <>
-      <Example />
+      <KeyboardEvents />
     </>
   );
 }

@@ -1,31 +1,29 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect } from 'react';
 
-
-type keyPressed = {
-    key: string;
-    type: string;
-    code: string;
-    ctrlKey?: boolean;
-    altKey?: boolean;
-    shiftKey?: boolean;
-    metaKey?: boolean;
-}
-
-const useKeyboardEvent = () => {
-    const [keyPressed, setKeyPressed] = useState<keyPressed>()
-    const handleKeyDown = useCallback((event: KeyboardEvent) => {
-        const { type, code, key, shiftKey, ctrlKey, metaKey } = event
-        setKeyPressed({ type, code, key, shiftKey, ctrlKey, metaKey })
-    }, [])
-
+function useKeyboardEvent(keys: string[], callback: (event: KeyboardEvent) => void): void {
     useEffect(() => {
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-    })
+        const keysSet = new Set(keys)
 
-    return keyPressed
+        function handleKeyDown(event: KeyboardEvent): void {
+            if (keysSet.has(event.key)) {
+                callback(event);
+            }
+        }
+        function handleKeyUp(event: KeyboardEvent): void {
+            if (keysSet.has(event.key)) {
+                callback(event);
+            }
+        }
 
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+
+        };
+    }, [keys, callback]);
 }
 
-
-export default useKeyboardEvent
+export default useKeyboardEvent;
