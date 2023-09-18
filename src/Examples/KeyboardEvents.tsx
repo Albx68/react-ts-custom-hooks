@@ -91,12 +91,12 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
         }
         if (checkBound()) {
             const xMap = {
-                'a': -10,
-                'd': 10
+                'a': -20,
+                'd': 20
             }
             const yMap = {
-                'w': -10,
-                's': 10
+                'w': -20,
+                's': 20
             }
 
             if (event.key in xMap) {
