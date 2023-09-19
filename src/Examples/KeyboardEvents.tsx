@@ -54,14 +54,14 @@ const Player = ({ playerMovement, player_size }: { playerMovement: playerMovemen
 const initialJoystick = { x: 0, y: 0 }
 const initialVelocity = { 'a': 0, 'd': 0, 'w': 0, 's': 0 }
 
-const Joystick = ({ setPlayerMovement, playerMovement, playerSize }: {
+const Joystick = ({ setPlayerMovement, playerMovement, player_size }: {
     setPlayerMovement: React.Dispatch<React.SetStateAction<{
         x: number;
         y: number;
     }>>, playerMovement: {
         x: number;
         y: number
-    }, playerSize: number
+    }, player_size: number
 }) => {
     const { width } = useWindowDimensions()
     const velocity = 3
@@ -76,9 +76,29 @@ const Joystick = ({ setPlayerMovement, playerMovement, playerSize }: {
             return -1
         }
     }
+
     const handleMove = useCallback((event: KeyboardEvent) => {
-        const speed = 15
+        const speed = player_size
         setCurrentBtn(event)
+        let t: number
+        const handleKey = (key: string) => {
+            switch (key) {
+                case "w":
+                    setPlayerMovement(p => ({ ...p, y: PLAYGROUND_HEIGHT - 2 * player_size }))
+                    t = setTimeout(() => {
+                        setPlayerMovement(p => ({ ...p, y: PLAYGROUND_HEIGHT - player_size }))
+                        clearTimeout(t)
+                    }, 100)
+                    break
+                case "s":
+                    setPlayerMovement(p => ({ ...p, y: PLAYGROUND_HEIGHT - player_size / 2 }))
+                    t = setTimeout(() => {
+                        setPlayerMovement(p => ({ ...p, y: PLAYGROUND_HEIGHT - player_size }))
+                        clearTimeout(t)
+                    }, 100)
+                    break
+            }
+        }
         const checkBound = () => {
             if (
                 playerMovement.x < 10 ||
@@ -99,12 +119,12 @@ const Joystick = ({ setPlayerMovement, playerMovement, playerSize }: {
         }
         if (checkBound()) {
             const xMap = {
-                'a': -speed - 10,
-                'd': speed + 10
+                'a': -speed,
+                'd': speed
             }
             const yMap = {
-                'w': -0,
-                's': 0
+                'w': -speed,
+                's': speed
             }
 
             if (event.key in xMap) {
@@ -115,13 +135,15 @@ const Joystick = ({ setPlayerMovement, playerMovement, playerSize }: {
             }
             if (event.key in yMap) {
                 const direction = getDirection(yMap[event.key as keyof typeof yMap])
-                setPlayerMovement(p => ({ ...p, y: p.y + yMap[event.key as keyof typeof yMap] + (direction * velocityMap[event.key as keyof typeof velocityMap]) }))
+                // setPlayerMovement(p => ({ ...p, y: p.y + yMap[event.key as keyof typeof yMap] + (direction * velocityMap[event.key as keyof typeof velocityMap]) }))
                 setJoystickMovement(p => ({ ...p, y: yMap[event.key as keyof typeof yMap] }))
                 setVelocityMap(p => ({ ...p, [event.key]: p[event.key as keyof typeof p] + velocity }))
 
             }
+            handleKey(event.key)
+
         }
-    }, [playerMovement.x, playerMovement.y, width, velocityMap, setPlayerMovement])
+    }, [playerMovement.x, playerMovement.y, width, velocityMap, setPlayerMovement, player_size])
 
     const handleResetKeyUp = useCallback((event: KeyboardEvent) => {
         if (event.type === "keyup") {
@@ -143,8 +165,8 @@ const Joystick = ({ setPlayerMovement, playerMovement, playerSize }: {
             <motion.div className="bg-emerald-700 h-12 w-12 rounded-full" animate={{ x: joystickMovement.x, y: joystickMovement.y }}></motion.div>
         </div >
         <div className="grid grid-cols-3 gap-4">
-            <div className="col-span-3 flex justify-center"><div className={`${currentBtn?.key === 'w' ? 'bg-emerald-300' : 'bg-emerald-100'} text-emerald-900 px-8 py-6 rounded-lg text-xl `}>W</div></div>
-            {['A', 'S', 'D'].map(el => <div key={el} className={`${currentBtn?.key === el.toLowerCase() ? 'bg-emerald-300' : 'bg-emerald-100'} text-emerald-900 px-8 py-6 rounded-lg text-xl`}>{el}</div>)}
+            <div className="col-span-3 flex justify-center"><div className={`${currentBtn?.key === 'w' ? 'bg-emerald-500' : 'bg-emerald-100'} text-emerald-900 px-8 py-6 rounded-lg text-xl `}>W</div></div>
+            {['A', 'S', 'D'].map(el => <div key={el} className={`${currentBtn?.key === el.toLowerCase() ? 'bg-emerald-500' : 'bg-emerald-100'} text-emerald-900 px-8 py-6 rounded-lg text-xl`}>{el}</div>)}
         </div>
     </div>
 }
