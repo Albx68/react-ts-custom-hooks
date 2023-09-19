@@ -13,12 +13,14 @@ function useKeyboardEventAsync(keys: string[], callbackKeyDown: (event: Keyboard
 
         function handleKeyUp(event: KeyboardEvent): void {
             if (keys.includes(event.key)) {
+
                 setPressedKeys(p => {
                     return p.filter(el => el.key !== event.key)
                 })
                 callBackKeyUp(event)
             }
         }
+
 
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('keyup', handleKeyUp);

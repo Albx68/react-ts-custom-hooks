@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useState } from "react"
 import { motion } from "framer-motion"
 import useKeyboardEventAsync from "../utils/customHooks/useKeyboardEventAsync";
+import useWindowDimensions from "../utils/customHooks/useWindowDimension";
 
 type playerMovement = {
     x: number;
@@ -8,16 +9,18 @@ type playerMovement = {
 }
 
 const KeyboardEvents = () => {
-    const [playerMovement, setPlayerMovement] = useState({ x: 0, y: 0 })
+    const { width } = useWindowDimensions()
+    const player_size = width / 20
+    const [playerMovement, setPlayerMovement] = useState({ x: width / 2, y: PLAYGROUND_HEIGHT - player_size })
     return (
         <div className="w-screen">
             <Gap />
-            <PlayGround ><Player playerMovement={playerMovement} />
+            <PlayGround ><Player playerMovement={playerMovement} player_size={player_size} />
             </PlayGround>
             <Gap />
 
             <div className="justify-center flex">
-                <Joystick setPlayerMovement={setPlayerMovement} playerMovement={playerMovement} />
+                <Joystick setPlayerMovement={setPlayerMovement} playerMovement={playerMovement} player_size={player_size} />
             </div>
         </div>
     )
@@ -31,11 +34,11 @@ const Gap = () => {
 
 const PLAYGROUND_HEIGHT = 400
 const PLAYGROUND_WIDTH = 400
-
 const PlayGround = ({ children }: { children: ReactNode }) => {
-    const viewBox = `0 0 ${PLAYGROUND_HEIGHT} ${PLAYGROUND_WIDTH}`
+    const { width } = useWindowDimensions()
+    const viewBox = `0 0 ${width} ${PLAYGROUND_HEIGHT}`
     return <div className="flex justify-center item-center">
-        <svg viewBox={viewBox} className="border-2 rounded-lg border-[#99ff99]" height={PLAYGROUND_HEIGHT} width={PLAYGROUND_WIDTH}>
+        <svg viewBox={viewBox} className="border-2 rounded-lg border-[#99ff99]" height={PLAYGROUND_HEIGHT} width={width}>
             {children}
         </svg>
     </div>
@@ -43,21 +46,24 @@ const PlayGround = ({ children }: { children: ReactNode }) => {
 
 
 
-const Player = ({ playerMovement }: { playerMovement: playerMovement }) => {
-    return <motion.circle r={10} fill={"#99ff99"} animate={{ cx: playerMovement.x, cy: playerMovement.y }}>{JSON.stringify(playerMovement)}</motion.circle>
+const Player = ({ playerMovement, player_size }: { playerMovement: playerMovement, player_size: number }) => {
+
+
+    return <motion.rect height={player_size} width={player_size} fill={"#99ff99"} animate={{ x: playerMovement.x, y: playerMovement.y }}>{JSON.stringify(playerMovement)}</motion.rect>
 }
 const initialJoystick = { x: 0, y: 0 }
 const initialVelocity = { 'a': 0, 'd': 0, 'w': 0, 's': 0 }
 
-const Joystick = ({ setPlayerMovement, playerMovement }: {
+const Joystick = ({ setPlayerMovement, playerMovement, playerSize }: {
     setPlayerMovement: React.Dispatch<React.SetStateAction<{
         x: number;
         y: number;
     }>>, playerMovement: {
         x: number;
         y: number
-    }
+    }, playerSize: number
 }) => {
+    const { width } = useWindowDimensions()
     const velocity = 3
     const [currentBtn, setCurrentBtn] = useState<KeyboardEvent>()
     const [joystickMovement, setJoystickMovement] = useState(initialJoystick)
@@ -76,12 +82,12 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
         const checkBound = () => {
             if (
                 playerMovement.x < 10 ||
-                playerMovement.x > PLAYGROUND_WIDTH - 10 ||
+                playerMovement.x > width - 10 ||
                 playerMovement.y < 10 ||
                 playerMovement.y > PLAYGROUND_HEIGHT - 10
             ) {
                 // Player is out of bounds, reset their position
-                const newX = Math.min(Math.max(playerMovement.x, 10), PLAYGROUND_WIDTH - 10);
+                const newX = Math.min(Math.max(playerMovement.x, 10), width - 10);
                 const newY = Math.min(Math.max(playerMovement.y, 10), PLAYGROUND_HEIGHT - 10);
 
                 setPlayerMovement({ x: newX, y: newY });
@@ -97,8 +103,8 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
                 'd': speed + 10
             }
             const yMap = {
-                'w': -speed,
-                's': speed
+                'w': -0,
+                's': 0
             }
 
             if (event.key in xMap) {
@@ -114,11 +120,8 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
                 setVelocityMap(p => ({ ...p, [event.key]: p[event.key as keyof typeof p] + velocity }))
 
             }
-            console.log("event type", event.type)
-
-
         }
-    }, [setPlayerMovement, velocityMap, playerMovement])
+    }, [playerMovement.x, playerMovement.y, width, velocityMap, setPlayerMovement])
 
     const handleResetKeyUp = useCallback((event: KeyboardEvent) => {
         if (event.type === "keyup") {
