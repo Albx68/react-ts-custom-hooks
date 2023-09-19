@@ -1,6 +1,6 @@
-import { ReactNode, useState } from "react"
-import useKeyboardEvent from "../utils/customHooks/useKeyboardEvent"
+import { ReactNode, useCallback, useState } from "react"
 import { motion } from "framer-motion"
+import useKeyboardEventAsync from "../utils/customHooks/useKeyboardEventAsync";
 
 type playerMovement = {
     x: number;
@@ -46,6 +46,8 @@ const PlayGround = ({ children }: { children: ReactNode }) => {
 const Player = ({ playerMovement }: { playerMovement: playerMovement }) => {
     return <motion.circle r={10} fill={"#99ff99"} animate={{ cx: playerMovement.x, cy: playerMovement.y }}>{JSON.stringify(playerMovement)}</motion.circle>
 }
+const initialJoystick = { x: 0, y: 0 }
+const initialVelocity = { 'a': 0, 'd': 0, 'w': 0, 's': 0 }
 
 const Joystick = ({ setPlayerMovement, playerMovement }: {
     setPlayerMovement: React.Dispatch<React.SetStateAction<{
@@ -57,8 +59,7 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
     }
 }) => {
     const velocity = 3
-    const initialJoystick = { x: 0, y: 0 }
-    const initialVelocity = { 'a': 0, 'd': 0, 'w': 0, 's': 0 }
+    const [currentBtn, setCurrentBtn] = useState<KeyboardEvent>()
     const [joystickMovement, setJoystickMovement] = useState(initialJoystick)
     const [velocityMap, setVelocityMap] = useState(initialVelocity)
     const getDirection = (val: number) => {
@@ -69,8 +70,9 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
             return -1
         }
     }
-    const handleMove = (event: KeyboardEvent) => {
-
+    const handleMove = useCallback((event: KeyboardEvent) => {
+        const speed = 15
+        setCurrentBtn(event)
         const checkBound = () => {
             if (
                 playerMovement.x < 10 ||
@@ -91,12 +93,12 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
         }
         if (checkBound()) {
             const xMap = {
-                'a': -20,
-                'd': 20
+                'a': -speed - 10,
+                'd': speed + 10
             }
             const yMap = {
-                'w': -20,
-                's': 20
+                'w': -speed,
+                's': speed
             }
 
             if (event.key in xMap) {
@@ -112,24 +114,35 @@ const Joystick = ({ setPlayerMovement, playerMovement }: {
                 setVelocityMap(p => ({ ...p, [event.key]: p[event.key as keyof typeof p] + velocity }))
 
             }
-            if (event.type === "keyup") {
-                const t = setTimeout(() => {
-                    setJoystickMovement(initialJoystick)
-                    setVelocityMap(initialVelocity)
-                    clearTimeout(t)
-                }, 50)
-            }
+            console.log("event type", event.type)
+
+
         }
-    }
+    }, [setPlayerMovement, velocityMap, playerMovement])
 
-    useKeyboardEvent(['a', 'd', 'w', 's'], handleMove)
+    const handleResetKeyUp = useCallback((event: KeyboardEvent) => {
+        if (event.type === "keyup") {
+            setCurrentBtn(undefined)
+            const t = setTimeout(() => {
+                setJoystickMovement(initialJoystick)
+                setVelocityMap(initialVelocity)
+                clearTimeout(t)
+            }, 50)
+        }
+    }, [])
 
 
-    return <div>
+
+    useKeyboardEventAsync(['a', 'd', 'w', 's'], handleMove, handleResetKeyUp);
+
+    return <div className="flex flex-col justify-center items-center gap-4">
         <div className="bg-emerald-100 h-20 w-20 rounded-full flex justify-center items-center">
             <motion.div className="bg-emerald-700 h-12 w-12 rounded-full" animate={{ x: joystickMovement.x, y: joystickMovement.y }}></motion.div>
         </div >
-
+        <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-3 flex justify-center"><div className={`${currentBtn?.key === 'w' ? 'bg-emerald-300' : 'bg-emerald-100'} text-emerald-900 px-8 py-6 rounded-lg text-xl `}>W</div></div>
+            {['A', 'S', 'D'].map(el => <div key={el} className={`${currentBtn?.key === el.toLowerCase() ? 'bg-emerald-300' : 'bg-emerald-100'} text-emerald-900 px-8 py-6 rounded-lg text-xl`}>{el}</div>)}
+        </div>
     </div>
 }
 
