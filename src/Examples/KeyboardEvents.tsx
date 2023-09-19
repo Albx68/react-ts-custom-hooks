@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useState } from "react"
-import { motion } from "framer-motion"
+import { MotionValue, motion, useMotionValue } from "framer-motion"
 import useKeyboardEventAsync from "../utils/customHooks/useKeyboardEventAsync";
 import useWindowDimensions from "../utils/customHooks/useWindowDimension";
 
@@ -12,15 +12,17 @@ const KeyboardEvents = () => {
     const { width } = useWindowDimensions()
     const player_size = width / 20
     const [playerMovement, setPlayerMovement] = useState({ x: width / 2, y: PLAYGROUND_HEIGHT - player_size })
+    const rotatePlayer = useMotionValue(0)
+
     return (
         <div className="w-screen">
             <Gap />
-            <PlayGround ><Player playerMovement={playerMovement} player_size={player_size} />
+            <PlayGround ><Player playerMovement={playerMovement} player_size={player_size} rotatePlayer={rotatePlayer} />
             </PlayGround>
             <Gap />
 
             <div className="justify-center flex">
-                <Joystick setPlayerMovement={setPlayerMovement} playerMovement={playerMovement} player_size={player_size} />
+                <Joystick rotatePlayer={rotatePlayer} setPlayerMovement={setPlayerMovement} playerMovement={playerMovement} player_size={player_size} />
             </div>
         </div>
     )
@@ -46,22 +48,22 @@ const PlayGround = ({ children }: { children: ReactNode }) => {
 
 
 
-const Player = ({ playerMovement, player_size }: { playerMovement: playerMovement, player_size: number }) => {
+const Player = ({ playerMovement, player_size, rotatePlayer }: { playerMovement: playerMovement, player_size: number, rotatePlayer: MotionValue }) => {
 
 
-    return <motion.rect height={player_size} width={player_size} fill={"#99ff99"} animate={{ x: playerMovement.x, y: playerMovement.y }}>{JSON.stringify(playerMovement)}</motion.rect>
+    return <motion.rect height={player_size} width={player_size} fill={"#99ff99"} animate={{ x: playerMovement.x, y: playerMovement.y, rotate: rotatePlayer.get(), transformOrigin: "center center" }}>{JSON.stringify(playerMovement)}</motion.rect>
 }
 const initialJoystick = { x: 0, y: 0 }
 const initialVelocity = { 'a': 0, 'd': 0, 'w': 0, 's': 0 }
 
-const Joystick = ({ setPlayerMovement, playerMovement, player_size }: {
+const Joystick = ({ setPlayerMovement, playerMovement, player_size, rotatePlayer }: {
     setPlayerMovement: React.Dispatch<React.SetStateAction<{
         x: number;
         y: number;
     }>>, playerMovement: {
         x: number;
         y: number
-    }, player_size: number
+    }, player_size: number, rotatePlayer: MotionValue
 }) => {
     const { width } = useWindowDimensions()
     const velocity = 3
@@ -85,8 +87,11 @@ const Joystick = ({ setPlayerMovement, playerMovement, player_size }: {
             switch (key) {
                 case "w":
                     setPlayerMovement(p => ({ ...p, y: PLAYGROUND_HEIGHT - 2 * player_size }))
+                    rotatePlayer.set(rotatePlayer.get() - 360)
+
                     t = setTimeout(() => {
                         setPlayerMovement(p => ({ ...p, y: PLAYGROUND_HEIGHT - player_size }))
+
                         clearTimeout(t)
                     }, 100)
                     break
